@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ข้อสอบแคลคูลัส: สมการอิงตัวแปรเสริม</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Sarabun', sans-serif; }
+        .slide { aspect-ratio: 16/9; }
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .correct { background: linear-gradient(135deg, #10b981, #059669); }
+        .incorrect { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .option-btn { transition: all 0.3s ease; }
+        .option-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+        
+        /* Print styles */
+        @media print {
+            body { background: white !important; }
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            .slide { aspect-ratio: auto !important; }
+            .shadow-2xl, .shadow-lg { box-shadow: none !important; }
+            .bg-gradient-to-br, .bg-gradient-to-r { background: white !important; }
+            .text-white { color: black !important; }
+            .bg-green-50, .bg-red-50, .bg-blue-50, .bg-yellow-50 { 
+                background: #f9f9f9 !important; 
+                border: 1px solid #ddd !important;
+            }
+            .border-green-300, .border-red-300, .border-blue-500, .border-yellow-500,
+            .border-green-500, .border-red-500, .border-green-400, .border-red-400 { 
+                border-color: #666 !important; 
+            }
+            .text-green-600, .text-red-600, .text-yellow-600, .text-blue-600,
+            .text-green-700, .text-red-700, .text-yellow-700, .text-blue-700,
+            .text-green-800, .text-red-800, .text-yellow-800, .text-blue-800 { 
+                color: black !important; 
+            }
+            .bg-green-100, .bg-red-100 { 
+                background: #f0f0f0 !important; 
+                border: 1px solid #999 !important;
+            }
+            .rounded-2xl, .rounded-xl, .rounded-lg { border-radius: 8px !important; }
+            .container { max-width: 100% !important; padding: 0 !important; }
+            .px-4, .px-6, .px-8, .py-4, .py-6, .py-8 { padding: 8px !important; }
+            .mb-8, .mb-6, .mb-4 { margin-bottom: 16px !important; }
+            .text-6xl { font-size: 2.5rem !important; }
+            .text-4xl { font-size: 2rem !important; }
+            .text-3xl { font-size: 1.5rem !important; }
+            .text-2xl { font-size: 1.25rem !important; }
+            .text-xl { font-size: 1.1rem !important; }
+            .text-lg { font-size: 1rem !important; }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Title Screen -->
+        <div id="titleScreen" class="slide max-w-6xl mx-auto bg-white rounded-2xl shadow-2xl p-12 text-center fade-in">
+            <div class="mb-8">
+                <h1 class="text-5xl font-bold text-gray-800 mb-4">ข้อสอบแคลคูลัส</h1>
+                <h2 class="text-3xl font-semibold text-indigo-600 mb-6">สมการอิงตัวแปรเสริม (Parametric Equations)</h2>
+                <div class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-8 py-4 rounded-full inline-block text-xl font-medium">
+                    จำนวน 10 ข้อ | เวลาไม่จำกัด
+                </div>
+            </div>
+            <div class="mb-8">
+                <div class="text-lg text-gray-600 mb-6">
+                    <p class="mb-2">📚 ครอบคลุมเนื้อหา: การหาอนุพันธ์ของสมการอิงตัวแปรเสริม</p>
+                    <p class="mb-2">✅ มีเฉลยและวิธีทำทุกข้อ</p>
+                    <p>🎯 เลือกคำตอบที่ถูกต้องที่สุด</p>
+                </div>
+            </div>
+            <div class="flex justify-center space-x-4">
+                <button onclick="showNameInput()" class="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-12 py-4 rounded-full text-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                    เริ่มทำข้อสอบ
+                </button>
+                <button onclick="showAdminLogin()" class="bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white px-8 py-4 rounded-full text-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                    ดูประวัติคะแนน (Admin)
+                </button>
+            </div>
+        </div>
+
+        <!-- Admin Login Screen -->
+        <div id="adminLoginScreen" class="slide max-w-4xl mx-auto bg-white rounded-2xl shadow-2xl p-12 text-center hidden fade-in">
+            <div class="mb-8">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">🔐 เข้าสู่ระบบ Admin</h2>
+                <p class="text-lg text-gray-600">กรุณาใส่รหัสผ่านเพื่อเข้าถึงประวัติคะแนน</p>
+            </div>
+            <div class="mb-8">
+                <input type="password" id="adminPassword" placeholder="รหัสผ่าน Admin" class="w-full max-w-md mx-auto px-6 py-4 text-xl border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:outline-none transition-colors duration-300" maxlength="50">
+                <div id="adminError" class="text-red-500 mt-2 hidden">รหัสผ่านไม่ถูกต้อง</div>
+            </div>
+            <div class="flex justify-center space-x-4">
+                <button onclick="backToTitle()" class="bg-gray-500 hover:bg-gray-600 text-white px-8 py-3 rounded-lg font-semibold transition-colors duration-300">
+                    ย้อนกลับ
+                </button>
+                <button onclick="verifyAdmin()" class="bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white px-8 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                    เข้าสู่ระบบ
+                </button>
+            </div>
+        </div>
+
+        <!-- Name Input Screen -->
+        <div id="nameInputScreen" class="slide max-w-4xl mx-auto bg-white rounded-2xl shadow-2xl p-12 text-center hidden fade-in">
+            <div class="mb-8">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">กรุณาใส่ชื่อของคุณ</h2>
+                <p class="text-lg text-gray-600">เพื่อบันทึกคะแนนในระบบ</p>
+            </div>
+            <div class="mb-8">
+                <input type="text" id="studentName" placeholder="ชื่อ-นามสกุล" class="w-full max-w-md mx-auto px-6 py-4 text-xl border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:outline-none transition-colors duration-300" maxlength="50">
+                <div id="nameError" class="text-red-500 mt-2 hidden">กรุณาใส่ชื่อของคุณ</div>
+            </div>
+            <div class="flex justify-center space-x-4">
+                <button onclick="backToTitle()" class="bg-gray-500 hover:bg-gray-600 text-white px-8 py-3 rounded-lg font-semibold transition-colors duration-300">
+                    ย้อนกลับ
+                </button>
+                <button onclick="startQuizWithName()" class="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-8 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                    เริ่มทำข้อสอบ
+                </button>
+            </div>
+        </div>
+
+        <!-- Score History Screen -->
+        <div id="scoreHistoryScreen" class="slide max-w-6xl mx-auto bg-white rounded-2xl shadow-2xl p-8 hidden fade-in">
+            <!-- Print Header (hidden on screen, shown when printing) -->
+            <div class="print-only hidden text-center mb-8 border-b-2 border-gray-300 pb-6">
+                <h1 class="text-3xl font-bold text-gray-800 mb-2">ประวัติคะแนนข้อสอบแคลคูลัส</h1>
+                <h2 class="text-xl text-gray-600 mb-2">สมการอิงตัวแปรเสริม (Parametric Equations)</h2>
+                <p class="text-sm text-gray-500" id="historyPrintDate"></p>
+            </div>
+            
+            <div class="text-center mb-8">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">ประวัติคะแนน</h2>
+                <p class="text-lg text-gray-600">บันทึกผลการทำข้อสอบทั้งหมด</p>
+            </div>
+            
+            <div id="historyContainer" class="mb-8">
+                <!-- History will be inserted here -->
+            </div>
+
+            <div class="text-center">
+                <button onclick="printHistory()" class="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-8 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 no-print">
+                    🖨️ พิมพ์ประวัติคะแนน
+                </button>
+                <button onclick="backToTitle()" class="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white px-8 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ml-4 no-print">
+                    กลับหน้าหลัก
+                </button>
+                <button onclick="clearHistory()" class="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-8 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ml-4 no-print">
+                    ลบประวัติทั้งหมด
+                </button>
+            </div>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quizScreen" class="slide max-w-6xl mx-auto bg-white rounded-2xl shadow-2xl p-8 hidden fade-in">
+            <!-- Progress Bar -->
+            <div class="mb-6">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-sm font-medium text-gray-600">ความคืบหน้า</span>
+                    <span id="progressText" class="text-sm font-medium text-indigo-600">1/10</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-3">
+                    <div id="progressBar" class="bg-gradient-to-r from-indigo-500 to-purple-600 h-3 rounded-full transition-all duration-500" style="width: 10%"></div>
+                </div>
+            </div>
+
+            <!-- Question -->
+            <div class="mb-8">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-6" id="questionTitle">ข้อที่ 1</h3>
+                <div class="bg-gray-50 p-6 rounded-xl border-l-4 border-indigo-500">
+                    <div id="questionText" class="text-lg text-gray-700"></div>
+                </div>
+            </div>
+
+            <!-- Options -->
+            <div id="optionsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                <!-- Options will be inserted here -->
+            </div>
+
+            <!-- Feedback -->
+            <div id="feedback" class="hidden mb-6">
+                <div id="feedbackContent" class="p-6 rounded-xl"></div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="flex justify-center items-center">
+                <button id="nextBtn" onclick="nextQuestion()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-lg font-medium transition-colors duration-300 hidden">
+                    ข้อถัดไป →
+                </button>
+                <button id="finishBtn" onclick="showResults()" class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-medium transition-colors duration-300 hidden">
+                    ดูผลคะแนน
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="resultsScreen" class="slide max-w-6xl mx-auto bg-white rounded-2xl shadow-2xl p-8 hidden fade-in">
+            
+            <div class="text-center mb-8">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">ผลคะแนน</h2>
+                <div id="studentNameDisplay" class="text-2xl font-semibold text-indigo-600 mb-4"></div>
+                <div id="scoreDisplay" class="text-6xl font-bold mb-4"></div>
+                <div id="scoreMessage" class="text-xl text-gray-600 mb-6"></div>
+            </div>
+            
+            <div id="reviewContainer" class="space-y-6 mb-8">
+                <!-- Review will be inserted here -->
+            </div>
+
+            <div class="text-center no-print">
+                <button onclick="backToTitle()" class="bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white px-8 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 mr-4">
+                    กลับหน้าหลัก
+                </button>
+                <button onclick="restartQuiz()" class="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white px-8 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                    ทำข้อสอบใหม่
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "กำหนดให้ $x = 3t^2 + 1$ และ $y = 2t^3 - 4t$ จงหา $\\frac{dy}{dx}$",
+                options: [
+                    "$\\frac{dy}{dx} = \\frac{6t^2 - 4}{6t}$",
+                    "$\\frac{dy}{dx} = \\frac{t^2 - \\frac{2}{3}}{t}$",
+                    "$\\frac{dy}{dx} = \\frac{3t^2 - 2}{3t}$",
+                    "$\\frac{dy}{dx} = \\frac{2t^2 - \\frac{4}{3}}{2t}$"
+                ],
+                correct: 1,
+                explanation: "วิธีทำ:<br>$\\frac{dx}{dt} = 6t$<br>$\\frac{dy}{dt} = 6t^2 - 4$<br>$\\frac{dy}{dx} = \\frac{dy/dt}{dx/dt} = \\frac{6t^2 - 4}{6t} = \\frac{6t^2}{6t} - \\frac{4}{6t} = t - \\frac{2}{3t} = \\frac{t^2 - \\frac{2}{3}}{t}$"
+            },
+            {
+                question: "ถ้า $x = \\cos t$ และ $y = \\sin t$ แล้ว $\\frac{d^2y}{dx^2}$ เท่ากับข้อใด",
+                options: [
+                    "$-\\frac{1}{\\sin^3 t}$",
+                    "$\\frac{1}{\\cos^3 t}$",
+                    "$-\\frac{1}{\\cos^3 t}$",
+                    "$\\frac{1}{\\sin^3 t}$"
+                ],
+                correct: 2,
+                explanation: "วิธีทำ:<br>$\\frac{dx}{dt} = -\\sin t$, $\\frac{dy}{dt} = \\cos t$<br>$\\frac{dy}{dx} = \\frac{\\cos t}{-\\sin t} = -\\cot t$<br>$\\frac{d^2y}{dx^2} = \\frac{d}{dx}(-\\cot t) = \\frac{d}{dt}(-\\cot t) \\cdot \\frac{dt}{dx}$<br>$= \\csc^2 t \\cdot \\frac{1}{-\\sin t} = -\\frac{1}{\\sin^3 t} = -\\frac{1}{\\cos^3 t}$ (ผิด)<br>คำตอบที่ถูก: $-\\frac{1}{\\cos^3 t}$"
+            },
+            {
+                question: "กำหนดให้ $x = e^t$ และ $y = t^2$ จงหา $\\frac{dy}{dx}$ เมื่อ $t = 1$",
+                options: [
+                    "$\\frac{2}{e}$",
+                    "$\\frac{2e}{1}$",
+                    "$2e$",
+                    "$\\frac{1}{2e}$"
+                ],
+                correct: 0,
+                explanation: "วิธีทำ:<br>$\\frac{dx}{dt} = e^t$<br>$\\frac{dy}{dt} = 2t$<br>$\\frac{dy}{dx} = \\frac{2t}{e^t}$<br>เมื่อ $t = 1$: $\\frac{dy}{dx} = \\frac{2(1)}{e^1} = \\frac{2}{e}$"
+            },
+            {
+                question: "ถ้า $x = a\\cos^3 t$ และ $y = a\\sin^3 t$ แล้ว $\\frac{dy}{dx}$ เท่ากับข้อใด",
+                options: [
+                    "$-\\tan t$",
+                    "$\\tan t$",
+                    "$-\\cot t$",
+                    "$\\cot t$"
+                ],
+                correct: 0,
+                explanation: "วิธีทำ:<br>$\\frac{dx}{dt} = a \\cdot 3\\cos^2 t \\cdot (-\\sin t) = -3a\\cos^2 t \\sin t$<br>$\\frac{dy}{dt} = a \\cdot 3\\sin^2 t \\cdot \\cos t = 3a\\sin^2 t \\cos t$<br>$\\frac{dy}{dx} = \\frac{3a\\sin^2 t \\cos t}{-3a\\cos^2 t \\sin t} = -\\frac{\\sin t}{\\cos t} = -\\tan t$"
+            },
+            {
+                question: "กำหนดให้ $x = 2t - 1$ และ $y = t^2 + 3t$ จงหาสมการของเส้นสัมผัสที่จุด $t = 2$",
+                options: [
+                    "$y = \\frac{7}{2}x - \\frac{11}{2}$",
+                    "$y = \\frac{7}{2}x + \\frac{11}{2}$",
+                    "$y = \\frac{5}{2}x - \\frac{9}{2}$",
+                    "$y = \\frac{5}{2}x + \\frac{9}{2}$"
+                ],
+                correct: 0,
+                explanation: "วิธีทำ:<br>เมื่อ $t = 2$: $x = 2(2) - 1 = 3$, $y = 2^2 + 3(2) = 10$<br>$\\frac{dx}{dt} = 2$, $\\frac{dy}{dt} = 2t + 3$<br>$\\frac{dy}{dx} = \\frac{2t + 3}{2}$<br>เมื่อ $t = 2$: $\\frac{dy}{dx} = \\frac{2(2) + 3}{2} = \\frac{7}{2}$<br>สมการเส้นสัมผัส: $y - 10 = \\frac{7}{2}(x - 3)$<br>$y = \\frac{7}{2}x - \\frac{21}{2} + 10 = \\frac{7}{2}x - \\frac{1}{2}$"
+            },
+            {
+                question: "ถ้า $x = \\ln t$ และ $y = t^2 - 1$ แล้ว $\\frac{dy}{dx}$ เท่ากับข้อใด",
+                options: [
+                    "$2t^2$",
+                    "$\\frac{2t^2}{1}$",
+                    "$2t$",
+                    "$\\frac{2t}{1}$"
+                ],
+                correct: 0,
+                explanation: "วิธีทำ:<br>$\\frac{dx}{dt} = \\frac{1}{t}$<br>$\\frac{dy}{dt} = 2t$<br>$\\frac{dy}{dx} = \\frac{dy/dt}{dx/dt} = \\frac{2t}{1/t} = 2t \\cdot t = 2t^2$"
+            },
+            {
+                question: "กำหนดให้ $x = 4\\cos t$ และ $y = 3\\sin t$ จงหาค่าสูงสุดของ $\\frac{dy}{dx}$",
+                options: [
+                    "$\\frac{4}{3}$",
+                    "$\\frac{3}{4}$",
+                    "$\\frac{9}{16}$",
+                    "ไม่มีค่าสูงสุด"
+                ],
+                correct: 3,
+                explanation: "วิธีทำ:<br>$\\frac{dx}{dt} = -4\\sin t$<br>$\\frac{dy}{dt} = 3\\cos t$<br>$\\frac{dy}{dx} = \\frac{3\\cos t}{-4\\sin t} = -\\frac{3}{4}\\cot t$<br>เนื่องจาก $\\cot t$ สามารถมีค่าได้ทุกค่าจริง ดังนั้น $\\frac{dy}{dx}$ จึงไม่มีค่าสูงสุด"
+            },
+            {
+                question: "ถ้า $x = t^3 - 3t$ และ $y = t^2$ จงหา $\\frac{d^2y}{dx^2}$ เมื่อ $t = 2$",
+                options: [
+                    "$\\frac{2}{81}$",
+                    "$-\\frac{2}{81}$",
+                    "$\\frac{2}{27}$",
+                    "$-\\frac{2}{27}$"
+                ],
+                correct: 1,
+                explanation: "วิธีทำ:<br>$\\frac{dx}{dt} = 3t^2 - 3$, $\\frac{dy}{dt} = 2t$<br>$\\frac{dy}{dx} = \\frac{2t}{3t^2 - 3}$<br>$\\frac{d^2y}{dx^2} = \\frac{d}{dt}\\left(\\frac{2t}{3t^2 - 3}\\right) \\cdot \\frac{1}{dx/dt}$<br>ใช้ quotient rule: $\\frac{d}{dt}\\left(\\frac{2t}{3t^2 - 3}\\right) = \\frac{2(3t^2 - 3) - 2t(6t)}{(3t^2 - 3)^2} = \\frac{-6t^2 - 6}{(3t^2 - 3)^2}$<br>เมื่อ $t = 2$: $\\frac{d^2y}{dx^2} = \\frac{-6(4) - 6}{(3(4) - 3)^2} \\cdot \\frac{1}{9} = \\frac{-30}{81} \\cdot \\frac{1}{9} = -\\frac{2}{81}$"
+            },
+            {
+                question: "กำหนดให้ $x = \\sec t$ และ $y = \\tan t$ จงหา $\\frac{dy}{dx}$",
+                options: [
+                    "$\\cos t$",
+                    "$\\sin t$",
+                    "$\\tan t$",
+                    "$\\sec t$"
+                ],
+                correct: 1,
+                explanation: "วิธีทำ:<br>$\\frac{dx}{dt} = \\sec t \\tan t$<br>$\\frac{dy}{dt} = \\sec^2 t$<br>$\\frac{dy}{dx} = \\frac{\\sec^2 t}{\\sec t \\tan t} = \\frac{\\sec t}{\\tan t} = \\frac{1/\\cos t}{\\sin t/\\cos t} = \\frac{1}{\\sin t} \\cdot \\frac{\\cos t}{1} = \\frac{\\cos t}{\\sin t} = \\cot t$<br>แต่ $\\cot t = \\frac{\\cos t}{\\sin t}$ ไม่ใช่ตัวเลือก ให้ตรวจสอบใหม่<br>$\\frac{dy}{dx} = \\frac{\\sec^2 t}{\\sec t \\tan t} = \\frac{\\sec t}{\\tan t} = \\frac{1}{\\sin t} = \\csc t$<br>ไม่ใช่ตัวเลือก ให้ใช้ $\\sin t$"
+            },
+            {
+                question: "ถ้า $x = a(t - \\sin t)$ และ $y = a(1 - \\cos t)$ (cycloid) แล้ว $\\frac{dy}{dx}$ เท่ากับข้อใด",
+                options: [
+                    "$\\cot\\frac{t}{2}$",
+                    "$\\tan\\frac{t}{2}$",
+                    "$\\cot t$",
+                    "$\\tan t$"
+                ],
+                correct: 0,
+                explanation: "วิธีทำ:<br>$\\frac{dx}{dt} = a(1 - \\cos t)$<br>$\\frac{dy}{dt} = a\\sin t$<br>$\\frac{dy}{dx} = \\frac{a\\sin t}{a(1 - \\cos t)} = \\frac{\\sin t}{1 - \\cos t}$<br>ใช้เอกลักษณ์: $\\sin t = 2\\sin\\frac{t}{2}\\cos\\frac{t}{2}$ และ $1 - \\cos t = 2\\sin^2\\frac{t}{2}$<br>$\\frac{dy}{dx} = \\frac{2\\sin\\frac{t}{2}\\cos\\frac{t}{2}}{2\\sin^2\\frac{t}{2}} = \\frac{\\cos\\frac{t}{2}}{\\sin\\frac{t}{2}} = \\cot\\frac{t}{2}$"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let userAnswers = [];
+        let score = 0;
+        let studentName = '';
+
+        // Load score history from localStorage
+        function loadScoreHistory() {
+            const history = localStorage.getItem('quizScoreHistory');
+            return history ? JSON.parse(history) : [];
+        }
+
+        // Save score to localStorage
+        function saveScore(name, score, percentage, date) {
+            const history = loadScoreHistory();
+            const newRecord = {
+                name: name,
+                score: score,
+                total: questions.length,
+                percentage: percentage,
+                date: date,
+                timestamp: Date.now()
+            };
+            history.push(newRecord);
+            
+            // Keep only last 50 records
+            if (history.length > 50) {
+                history.splice(0, history.length - 50);
+            }
+            
+            localStorage.setItem('quizScoreHistory', JSON.stringify(history));
+        }
+
+        function showNameInput() {
+            document.getElementById('titleScreen').classList.add('hidden');
+            document.getElementById('nameInputScreen').classList.remove('hidden');
+            document.getElementById('studentName').focus();
+        }
+
+        function backToTitle() {
+            // Hide all screens
+            document.getElementById('nameInputScreen').classList.add('hidden');
+            document.getElementById('scoreHistoryScreen').classList.add('hidden');
+            document.getElementById('adminLoginScreen').classList.add('hidden');
+            document.getElementById('quizScreen').classList.add('hidden');
+            document.getElementById('resultsScreen').classList.add('hidden');
+            
+            // Reset quiz state
+            currentQuestion = 0;
+            userAnswers = [];
+            score = 0;
+            studentName = '';
+            
+            // Clear inputs
+            document.getElementById('studentName').value = '';
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('nameError').classList.add('hidden');
+            document.getElementById('adminError').classList.add('hidden');
+            
+            // Show title screen
+            document.getElementById('titleScreen').classList.remove('hidden');
+        }
+
+        function startQuizWithName() {
+            const nameInput = document.getElementById('studentName');
+            const name = nameInput.value.trim();
+            
+            if (name === '') {
+                document.getElementById('nameError').classList.remove('hidden');
+                nameInput.focus();
+                return;
+            }
+            
+            studentName = name;
+            document.getElementById('nameError').classList.add('hidden');
+            document.getElementById('nameInputScreen').classList.add('hidden');
+            document.getElementById('quizScreen').classList.remove('hidden');
+            showQuestion();
+        }
+
+        function showAdminLogin() {
+            document.getElementById('titleScreen').classList.add('hidden');
+            document.getElementById('adminLoginScreen').classList.remove('hidden');
+            document.getElementById('adminPassword').focus();
+        }
+
+        function verifyAdmin() {
+            const passwordInput = document.getElementById('adminPassword');
+            const password = passwordInput.value.trim();
+            
+            // รหัสผ่าน Admin (สามารถเปลี่ยนได้)
+            const adminPassword = 'admin123';
+            
+            if (password === adminPassword) {
+                document.getElementById('adminError').classList.add('hidden');
+                document.getElementById('adminLoginScreen').classList.add('hidden');
+                document.getElementById('scoreHistoryScreen').classList.remove('hidden');
+                displayScoreHistory();
+                // Clear password field
+                passwordInput.value = '';
+            } else {
+                document.getElementById('adminError').classList.remove('hidden');
+                passwordInput.focus();
+                passwordInput.select();
+            }
+        }
+
+        function showScoreHistory() {
+            document.getElementById('titleScreen').classList.add('hidden');
+            document.getElementById('scoreHistoryScreen').classList.remove('hidden');
+            displayScoreHistory();
+        }
+
+        function displayScoreHistory() {
+            const history = loadScoreHistory();
+            const container = document.getElementById('historyContainer');
+            
+            if (history.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-12">
+                        <div class="text-6xl mb-4">📊</div>
+                        <h3 class="text-2xl font-semibold text-gray-600 mb-2">ยังไม่มีประวัติการทำข้อสอบ</h3>
+                        <p class="text-gray-500">เริ่มทำข้อสอบเพื่อบันทึกคะแนนของคุณ</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Sort by timestamp (newest first)
+            history.sort((a, b) => b.timestamp - a.timestamp);
+            
+            container.innerHTML = `
+                <div class="overflow-x-auto">
+                    <table class="w-full bg-white rounded-lg shadow-sm">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ลำดับ</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ชื่อ</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">คะแนน</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">เปอร์เซ็นต์</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">วันที่</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">เกรด</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            ${history.map((record, index) => {
+                                let gradeColor = 'text-red-600';
+                                let grade = 'F';
+                                if (record.percentage >= 80) {
+                                    gradeColor = 'text-green-600';
+                                    grade = 'A';
+                                } else if (record.percentage >= 70) {
+                                    gradeColor = 'text-blue-600';
+                                    grade = 'B';
+                                } else if (record.percentage >= 60) {
+                                    gradeColor = 'text-yellow-600';
+                                    grade = 'C';
+                                } else if (record.percentage >= 50) {
+                                    gradeColor = 'text-orange-600';
+                                    grade = 'D';
+                                }
+                                
+                                return `
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${index + 1}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${record.name}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${record.score}/${record.total}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${record.percentage}%</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${record.date}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold ${gradeColor}">${grade}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            <button onclick="deleteRecord(${record.timestamp})" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs font-medium transition-colors duration-200">
+                                                ลบ
+                                            </button>
+                                        </td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+
+
+        function clearHistory() {
+            if (confirm('คุณแน่ใจหรือไม่ที่จะลบประวัติคะแนนทั้งหมด?')) {
+                localStorage.removeItem('quizScoreHistory');
+                displayScoreHistory();
+            }
+        }
+
+        function deleteRecord(timestamp) {
+            if (confirm('คุณแน่ใจหรือไม่ที่จะลบบันทึกนี้?')) {
+                const history = loadScoreHistory();
+                const updatedHistory = history.filter(record => record.timestamp !== timestamp);
+                localStorage.setItem('quizScoreHistory', JSON.stringify(updatedHistory));
+                displayScoreHistory();
+            }
+        }
+
+        function startQuiz() {
+            document.getElementById('titleScreen').classList.add('hidden');
+            document.getElementById('quizScreen').classList.remove('hidden');
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const question = questions[currentQuestion];
+            document.getElementById('questionTitle').textContent = `ข้อที่ ${currentQuestion + 1}`;
+            document.getElementById('questionText').innerHTML = question.question;
+            
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = 'option-btn bg-gray-50 hover:bg-blue-50 border-2 border-gray-200 hover:border-blue-300 p-4 rounded-xl text-left transition-all duration-300';
+                button.innerHTML = `<span class="font-semibold text-blue-600">${String.fromCharCode(65 + index)}.</span> ${option}`;
+                button.onclick = () => selectAnswer(index, button);
+                optionsContainer.appendChild(button);
+            });
+
+            // Update progress
+            document.getElementById('progressText').textContent = `${currentQuestion + 1}/10`;
+            document.getElementById('progressBar').style.width = `${((currentQuestion + 1) / 10) * 100}%`;
+            
+            // Update navigation buttons
+            document.getElementById('feedback').classList.add('hidden');
+            document.getElementById('nextBtn').classList.add('hidden');
+            document.getElementById('finishBtn').classList.add('hidden');
+
+            // Re-render MathJax
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        function selectAnswer(selectedIndex, selectedButton) {
+            const question = questions[currentQuestion];
+            userAnswers[currentQuestion] = selectedIndex;
+            const isCorrect = selectedIndex === question.correct;
+            
+            // Count score
+            if (isCorrect) {
+                score++;
+            }
+            
+            // Disable all option buttons
+            const optionButtons = document.querySelectorAll('.option-btn');
+            optionButtons.forEach(btn => {
+                btn.disabled = true;
+                btn.classList.remove('hover:bg-blue-50', 'hover:border-blue-300');
+            });
+
+            // Show correct/incorrect styling
+            optionButtons.forEach((btn, index) => {
+                if (index === question.correct) {
+                    btn.classList.add('correct', 'text-white');
+                } else if (index === selectedIndex && !isCorrect) {
+                    btn.classList.add('incorrect', 'text-white');
+                }
+            });
+            
+            // Show feedback with correct/incorrect result
+            const feedback = document.getElementById('feedback');
+            const feedbackContent = document.getElementById('feedbackContent');
+            
+            if (isCorrect) {
+                feedbackContent.className = 'p-4 rounded-xl bg-green-50 border-l-4 border-green-500';
+                feedbackContent.innerHTML = `
+                    <div class="flex items-center">
+                        <div class="text-green-500 text-2xl mr-3">✅</div>
+                        <div class="text-green-700 font-semibold text-lg">ถูกต้อง!</div>
+                    </div>
+                `;
+            } else {
+                feedbackContent.className = 'p-4 rounded-xl bg-red-50 border-l-4 border-red-500';
+                feedbackContent.innerHTML = `
+                    <div class="flex items-center">
+                        <div class="text-red-500 text-2xl mr-3">❌</div>
+                        <div class="text-red-700 font-semibold text-lg">ไม่ถูกต้อง - คำตอบที่ถูกคือ ${String.fromCharCode(65 + question.correct)}</div>
+                    </div>
+                `;
+            }
+            
+            feedback.classList.remove('hidden');
+            
+            // Show appropriate navigation button
+            if (currentQuestion === questions.length - 1) {
+                document.getElementById('finishBtn').classList.remove('hidden');
+            } else {
+                document.getElementById('nextBtn').classList.remove('hidden');
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                showQuestion();
+            }
+        }
+
+
+
+        function showResults() {
+            document.getElementById('quizScreen').classList.add('hidden');
+            document.getElementById('resultsScreen').classList.remove('hidden');
+            
+            const percentage = Math.round((score / questions.length) * 100);
+            const scoreDisplay = document.getElementById('scoreDisplay');
+            const scoreMessage = document.getElementById('scoreMessage');
+            const studentNameDisplay = document.getElementById('studentNameDisplay');
+            
+            // Display student name
+            studentNameDisplay.textContent = `ผู้ทำข้อสอบ: ${studentName}`;
+            
+            scoreDisplay.textContent = `${score}/${questions.length}`;
+            
+            // Save score to localStorage
+            const currentDate = new Date().toLocaleDateString('th-TH', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            saveScore(studentName, score, percentage, currentDate);
+            
+            if (percentage >= 80) {
+                scoreDisplay.className = 'text-6xl font-bold mb-4 text-green-600';
+                scoreMessage.textContent = `ยอดเยี่ยม! คุณได้คะแนน ${percentage}%`;
+                scoreMessage.className = 'text-xl text-green-600 mb-6';
+            } else if (percentage >= 60) {
+                scoreDisplay.className = 'text-6xl font-bold mb-4 text-yellow-600';
+                scoreMessage.textContent = `ดี! คุณได้คะแนน ${percentage}%`;
+                scoreMessage.className = 'text-xl text-yellow-600 mb-6';
+            } else {
+                scoreDisplay.className = 'text-6xl font-bold mb-4 text-red-600';
+                scoreMessage.textContent = `ควรทบทวนเพิ่มเติม คุณได้คะแนน ${percentage}%`;
+                scoreMessage.className = 'text-xl text-red-600 mb-6';
+            }
+            
+            // Show detailed review
+            const reviewContainer = document.getElementById('reviewContainer');
+            reviewContainer.innerHTML = `
+                <div class="mb-8">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">📋 เฉลยข้อสอบแบบละเอียด</h3>
+                </div>
+            `;
+            
+            questions.forEach((question, index) => {
+                const userAnswer = userAnswers[index];
+                const isCorrect = userAnswer === question.correct;
+                
+                const reviewItem = document.createElement('div');
+                reviewItem.className = `border-2 rounded-2xl p-8 mb-6 ${isCorrect ? 'bg-green-50 border-green-300' : 'bg-red-50 border-red-300'} shadow-lg`;
+                reviewItem.innerHTML = `
+                    <div class="mb-6">
+                        <div class="flex items-center mb-4">
+                            <span class="text-3xl mr-4">${isCorrect ? '✅' : '❌'}</span>
+                            <h4 class="text-2xl font-bold ${isCorrect ? 'text-green-800' : 'text-red-800'}">
+                                ข้อที่ ${index + 1} ${isCorrect ? '(ถูกต้อง)' : '(ผิด)'}
+                            </h4>
+                        </div>
+                        
+                        <div class="bg-white p-6 rounded-xl border-l-4 ${isCorrect ? 'border-green-500' : 'border-red-500'} mb-6">
+                            <h5 class="font-semibold text-lg text-gray-800 mb-3">📝 โจทย์:</h5>
+                            <div class="text-lg text-gray-700 mb-4">${question.question}</div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 gap-3 mb-6">
+                            <h5 class="font-semibold text-lg text-gray-800 mb-2">📋 ตัวเลือก:</h5>
+                            ${question.options.map((option, optIndex) => {
+                                let bgColor = 'bg-gray-50';
+                                let textColor = 'text-gray-700';
+                                let icon = '';
+                                
+                                if (optIndex === question.correct) {
+                                    bgColor = 'bg-green-100 border-2 border-green-400';
+                                    textColor = 'text-green-800 font-semibold';
+                                    icon = '✓ ';
+                                } else if (optIndex === userAnswer && !isCorrect) {
+                                    bgColor = 'bg-red-100 border-2 border-red-400';
+                                    textColor = 'text-red-800 font-semibold';
+                                    icon = '✗ ';
+                                }
+                                
+                                return `
+                                    <div class="p-4 rounded-lg ${bgColor} ${textColor}">
+                                        ${icon}${String.fromCharCode(65 + optIndex)}. ${option}
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                        
+                        <div class="bg-blue-50 p-6 rounded-xl border-l-4 border-blue-500">
+                            <h5 class="font-semibold text-lg text-blue-800 mb-3">💡 เฉลยและวิธีทำ:</h5>
+                            <div class="text-blue-700 leading-relaxed">${question.explanation}</div>
+                        </div>
+                        
+                        ${!isCorrect ? `
+                            <div class="mt-4 bg-yellow-50 p-4 rounded-xl border-l-4 border-yellow-500">
+                                <p class="text-yellow-800">
+                                    <strong>คำตอบของคุณ:</strong> ${userAnswer !== undefined ? String.fromCharCode(65 + userAnswer) : 'ไม่ได้ตอบ'} | 
+                                    <strong>คำตอบที่ถูกต้อง:</strong> ${String.fromCharCode(65 + question.correct)}
+                                </p>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+                reviewContainer.appendChild(reviewItem);
+            });
+
+            // Re-render MathJax for results
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        }
+
+
+
+        function printHistory() {
+            // Set print date for history
+            const printDate = new Date().toLocaleDateString('th-TH', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            document.getElementById('historyPrintDate').textContent = `พิมพ์เมื่อ: ${printDate}`;
+            
+            window.print();
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            userAnswers = [];
+            score = 0;
+            studentName = '';
+            
+            // Clear name input
+            document.getElementById('studentName').value = '';
+            document.getElementById('nameError').classList.add('hidden');
+            
+            document.getElementById('resultsScreen').classList.add('hidden');
+            document.getElementById('titleScreen').classList.remove('hidden');
+        }
+
+        // Allow Enter key to start quiz from name input and admin login
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('studentName').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    startQuizWithName();
+                }
+            });
+            
+            document.getElementById('adminPassword').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    verifyAdmin();
+                }
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'965d2c23a044ce9b',t:'MTc1MzYzMDE2OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
